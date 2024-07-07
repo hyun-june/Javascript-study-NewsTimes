@@ -56,6 +56,7 @@ const getNewsByKeyword = async()=>{
     const keyword = searchInput.value;
     url = new URL(`https://newsapi.org/v2/top-headlines?country=kr&q=${keyword}&apiKey=${API_KEY}`);
     getNews()
+    searchInput.value = '';
 }
 
 const render = ()=>{
