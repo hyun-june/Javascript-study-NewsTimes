@@ -1,6 +1,6 @@
-const API_KEY='7193a00c8b994a8da934dcf151157b84'
+// const API_KEY='7193a00c8b994a8da934dcf151157b84'
 // let url = new URL(`https://newsapi.org/v2/top-headlines?country=kr&apiKey=${API_KEY}`)
-let url = new URL(`https://noona-times-v2.netlify.app/top-headlines?country=kr&pageSize=${PAGE_SIZE}`)
+let url = new URL(`http://times-node-env.eba-appvq3ef.ap-northeast-2.elasticbeanstalk.com/top-headlines`)
 let newsList = [];
 
 let totalResults = 0;
@@ -43,14 +43,14 @@ const getNews = async () => {
 
 const getLatestNews = async () => {
     // url = new URL(`https://newsapi.org/v2/top-headlines?country=kr&apiKey=${API_KEY}`)
-    url = new URL(`https://noona-times-v2.netlify.app/top-headlines?country=kr&pageSize=${PAGE_SIZE}&apiKey=${API_KEY}`)
+    url = new URL(`http://times-node-env.eba-appvq3ef.ap-northeast-2.elasticbeanstalk.com/top-headlines`)
     getNews()
 }
 
 const getNewsByCategory = async (event) => {
     const category = event.target.textContent.toLowerCase();
     // url = new URL(`https://newsapi.org/v2/top-headlines?country=kr&category=${category}&apiKey=${API_KEY}`)
-    url = new URL(`https://noona-times-v2.netlify.app/top-headlines?country=kr&pageSize=${PAGE_SIZE}&category=${topic}&apiKey=${API_KEY}`)
+    url = new URL(`http://times-node-env.eba-appvq3ef.ap-northeast-2.elasticbeanstalk.com/top-headlines?category=${category}`)
     getNews()
 }
 
@@ -58,7 +58,7 @@ const getNewsByKeyword = async () => {
     page = 1;
     const keyword = searchInput.value;
     // url = new URL(`https://newsapi.org/v2/top-headlines?country=kr&q=${keyword}&apiKey=${API_KEY}`);
-    url = new URL(`https://noona-times-v2.netlify.app/top-headlines?q=${keyword}&country=kr&pageSize=${PAGE_SIZE}&apiKey=${API_KEY}`);
+    url = new URL(`http://times-node-env.eba-appvq3ef.ap-northeast-2.elasticbeanstalk.com/top-headlines?q=${keyword}`)
     getNews()
     searchInput.value = '';
 }
