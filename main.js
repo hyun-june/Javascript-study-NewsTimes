@@ -1,6 +1,6 @@
-// const API_KEY='7193a00c8b994a8da934dcf151157b84'
+const API_KEY='7193a00c8b994a8da934dcf151157b84'
 // let url = new URL(`https://newsapi.org/v2/top-headlines?country=kr&apiKey=${API_KEY}`)
-let url = new URL(`http://times-node-env.eba-appvq3ef.ap-northeast-2.elasticbeanstalk.com/top-headlines`)
+let url = new URL(`https://noona-times-v2.netlify.app/top-headlines?country=kr&pageSize=${PAGE_SIZE}`)
 let newsList = [];
 
 let totalResults = 0;
@@ -9,24 +9,24 @@ const pageSize = 10;
 const groupSize = 5;
 
 const menus = document.querySelectorAll(".menus button");
-menus.forEach(menu=>menu.addEventListener("click",(event)=>getNewsByCategory(event)))
+menus.forEach(menu => menu.addEventListener("click", (event) => getNewsByCategory(event)))
 const searchInput = document.getElementById("search-input");
-searchInput.addEventListener("keydown", (event)=>{
-    if(event.keyCode === 13){
+searchInput.addEventListener("keydown", (event) => {
+    if (event.keyCode === 13) {
         event.preventDefault();
         document.getElementById("search-btn").click();
     }
 })
 
-const getNews = async() =>{
+const getNews = async () => {
     try {
-        url.searchParams.set("page",page);
-        url.searchParams.set("pageSize",pageSize);
+        url.searchParams.set("page", page);
+        url.searchParams.set("pageSize", pageSize);
         const response = await fetch(url);
         const data = await response.json();
         console.log(data)
-        if(response.status===200){
-            if(data.articles.length===0){
+        if (response.status === 200) {
+            if (data.articles.length === 0) {
                 throw new Error("No result for this search")
             }
             newsList = data.articles;
@@ -41,42 +41,42 @@ const getNews = async() =>{
     }
 }
 
-const getLatestNews = async() =>{
+const getLatestNews = async () => {
     // url = new URL(`https://newsapi.org/v2/top-headlines?country=kr&apiKey=${API_KEY}`)
-    url = new URL(`http://times-node-env.eba-appvq3ef.ap-northeast-2.elasticbeanstalk.com/top-headlines`)
+    url = new URL(`https://noona-times-v2.netlify.app/top-headlines?country=kr&pageSize=${PAGE_SIZE}&apiKey=${API_KEY}`)
     getNews()
 }
 
-const getNewsByCategory = async(event)=>{
+const getNewsByCategory = async (event) => {
     const category = event.target.textContent.toLowerCase();
     // url = new URL(`https://newsapi.org/v2/top-headlines?country=kr&category=${category}&apiKey=${API_KEY}`)
-    url = new URL(`http://times-node-env.eba-appvq3ef.ap-northeast-2.elasticbeanstalk.com/top-headlines?category=${category}`)
+    url = new URL(`https://noona-times-v2.netlify.app/top-headlines?country=kr&pageSize=${PAGE_SIZE}&category=${topic}&apiKey=${API_KEY}`)
     getNews()
 }
 
-const getNewsByKeyword = async()=>{
+const getNewsByKeyword = async () => {
     page = 1;
     const keyword = searchInput.value;
     // url = new URL(`https://newsapi.org/v2/top-headlines?country=kr&q=${keyword}&apiKey=${API_KEY}`);
-    url = new URL(`http://times-node-env.eba-appvq3ef.ap-northeast-2.elasticbeanstalk.com/top-headlines?q=${keyword}`)
+    url = new URL(`https://noona-times-v2.netlify.app/top-headlines?q=${keyword}&country=kr&pageSize=${PAGE_SIZE}&apiKey=${API_KEY}`);
     getNews()
     searchInput.value = '';
 }
 
-const render = ()=>{
-    let newsHTML = newsList.map(news=>`<div class="row news">
+const render = () => {
+    let newsHTML = newsList.map(news => `<div class="row news">
         <div class="col-lg-4">
-            <img class="news-img-size" src="${news.urlToImage? news.urlToImage : "https://as2.ftcdn.net/v2/jpg/02/51/95/53/1000_F_251955356_FAQH0U1y1TZw3ZcdPGybwUkH90a3VAhb.jpg"}" alt="">
+            <img class="news-img-size" src="${news.urlToImage ? news.urlToImage : "https://as2.ftcdn.net/v2/jpg/02/51/95/53/1000_F_251955356_FAQH0U1y1TZw3ZcdPGybwUkH90a3VAhb.jpg"}" alt="">
         </div>
         <div class="col-lg-8">
-            <h2>${news.title? news.title : "No Title"}</h2>
+            <h2>${news.title ? news.title : "No Title"}</h2>
             <p>
-                ${news.description == null || news.description == ""? "내용 없음" 
-                : news.description.length >200 ? news.description.substring(0,200) + "..."
+                ${news.description == null || news.description == "" ? "내용 없음" 
+                : news.description.length > 200 ? news.description.substring(0, 200) + "..."
                 : news.description}
             </p>
             <div>
-                ${news.source.name? news.source.name : "no source"} * ${moment(news.published_date).fromNow()}
+                ${news.source.name ? news.source.name : "no source"} * ${moment(news.published_date).fromNow()}
             </div>
         </div>
     </div>`).join('');
@@ -88,28 +88,19 @@ const errorRender = (errorMessage) => {
     const errorHTML = `<div class="alert alert-danger" role="alert">
         ${errorMessage}
     </div>`
-    
+
     document.getElementById("news-board").innerHTML = errorHTML
 }
 
-const paginationRender = () =>{
-    // totalResult
-    // totalPages
-    // page
-    // pageSize
-    // groupSize
-    // pageGroup
-    // lastPage
-    // firstPage
-
-    const totalPages = Math.ceil(totalResults/pageSize);
-    const pageGroup = Math.ceil(page/groupSize);
+const paginationRender = () => {
+    const totalPages = Math.ceil(totalResults / pageSize);
+    const pageGroup = Math.ceil(page / groupSize);
     let lastPage = pageGroup * groupSize;
-    if(lastPage> totalPages){
-        lastPage = totalPages
+    if (lastPage > totalPages) {
+        lastPage = totalPages;
     }
 
-    let firstPage = lastPage - (groupSize - 1) <=0 ? 1 : lastPage - (groupSize - 1);
+    let firstPage = lastPage - (groupSize - 1) <= 0 ? 1 : lastPage - (groupSize - 1);
 
     let paginationHTML = page == firstPage ? "" : `
     <li class="page-item" onclick="moveToPage(1)"><a class="page-link" href="#">&lt;&lt;</a></li>
@@ -122,26 +113,26 @@ const paginationRender = () =>{
     paginationHTML += page == lastPage ? "" : `
     <li class="page-item" onclick="moveToPage(${page + 1})"><a class="page-link" href="#">&gt;</a></li>
     <li class="page-item" onclick="moveToPage(${totalPages})"><a class="page-link" href="#">&gt;&gt;</a></li>`;
-    document.querySelector(".pagination").innerHTML=paginationHTML;
+    document.querySelector(".pagination").innerHTML = paginationHTML;
 }
 
-const moveToPage = (pageNum) =>{
-    page=pageNum;
+const moveToPage = (pageNum) => {
+    page = pageNum;
     getNews();
 }
 
 getLatestNews();
 
 
-const openNav = () => document.getElementById("mySidenav").style.width="250px";
+const openNav = () => document.getElementById("mySidenav").style.width = "250px";
 
-const closeNav = () => document.getElementById("mySidenav").style.width="0";
+const closeNav = () => document.getElementById("mySidenav").style.width = "0";
 
-const searchButton = () =>{   
+const searchButton = () => {
     let searchArea = document.getElementById("search-area");
-    if(searchArea.style.display==='block'){
-        searchArea.style.display='none'
-    } else{
-        searchArea.style.display='block'
+    if (searchArea.style.display === 'block') {
+        searchArea.style.display = 'none'
+    } else {
+        searchArea.style.display = 'block'
     }
 }
