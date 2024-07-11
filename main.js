@@ -76,7 +76,7 @@ const render = () => {
                 : news.description}
             </p>
             <div>
-                ${news.source.name ? news.source.name : "no source"} * ${moment(news.published_date).fromNow()}
+                ${news.source.name ? news.source.name : "no source"} * ${moment(news.publishedAt).fromNow()}
             </div>
         </div>
     </div>`).join('');
