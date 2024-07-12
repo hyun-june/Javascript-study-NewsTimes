@@ -10,6 +10,11 @@ const groupSize = 5;
 
 const menus = document.querySelectorAll(".menus button");
 menus.forEach(menu => menu.addEventListener("click", (event) => getNewsByCategory(event)))
+
+const sideMenus = document.querySelectorAll(".sidenav a");
+const sideCategory = Array.from(sideMenus).slice(1);
+sideCategory.forEach(side => side.addEventListener("click",(event)=>getNewsByCategory(event)))
+
 const searchInput = document.getElementById("search-input");
 searchInput.addEventListener("keydown", (event) => {
     if (event.keyCode === 13) {
