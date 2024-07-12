@@ -49,14 +49,14 @@ const getNews = async () => {
 const getLatestNews = async () => {
     // url = new URL(`https://newsapi.org/v2/top-headlines?country=kr&apiKey=${API_KEY}`)
     url = new URL(`https://javascript-study-newstimes.netlify.app/top-headlines`)
-    getNews()
+    await getNews()
 }
 
 const getNewsByCategory = async (event) => {
     const category = event.target.textContent.toLowerCase();
     // url = new URL(`https://newsapi.org/v2/top-headlines?country=kr&category=${category}&apiKey=${API_KEY}`)
     url = new URL(`https://javascript-study-newstimes.netlify.app/top-headlines?category=${category}`)
-    getNews()
+    await getNews()
 }
 
 const getNewsByKeyword = async () => {
@@ -64,7 +64,7 @@ const getNewsByKeyword = async () => {
     const keyword = searchInput.value;
     // url = new URL(`https://newsapi.org/v2/top-headlines?country=kr&q=${keyword}&apiKey=${API_KEY}`);
     url = new URL(`https://javascript-study-newstimes.netlify.app/top-headlines?q=${keyword}`)
-    getNews()
+    await getNews()
     searchInput.value = '';
 }
 
