@@ -29,7 +29,8 @@ const getNews = async () => {
         url.searchParams.set("pageSize", pageSize);
         const response = await fetch(url);
         const data = await response.json();
-        console.log(data)
+        console.log("data",data)
+        console.log("response",response)
         if (response.status === 200) {
             if (data.articles.length === 0) {
                 throw new Error("No result for this search")
@@ -39,10 +40,10 @@ const getNews = async () => {
             render();
             paginationRender();
         } else {
-            throw new Error(data.message)
+            throw new Error(`Error ${response.status}: ${data.message}`);
         }
     } catch (error) {
-        errorRender(error.message)
+        errorRender(error.message, error.status)
     }
 }
 
@@ -89,12 +90,17 @@ const render = () => {
     document.getElementById("news-board").innerHTML = newsHTML;
 }
 
-const errorRender = (errorMessage) => {
-    const errorHTML = `<div class="alert alert-danger" role="alert">
-        ${errorMessage}
-    </div>`
+const errorRender = (errorMessage, responseStatus) => {
+    let errorHTML = `<div class="alert alert-danger" role="alert">
+        ${errorMessage}`;
 
-    document.getElementById("news-board").innerHTML = errorHTML
+    if (responseStatus) {
+        errorHTML += ` (Status: ${responseStatus})`;
+    }
+
+    errorHTML += `</div>`;
+
+    document.getElementById("news-board").innerHTML = errorHTML;
 }
 
 const paginationRender = () => {
